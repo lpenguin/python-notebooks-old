@@ -20,8 +20,21 @@ object fibd {
 		(1 to k).map{raba(_, n)}.sum
 
 	}                                         //> rab: (n: Int, k: Int)Long
+	
+	def rabCycle(n:Int, k:Int):Long = {
+		var ages = List(1l) ++ List.fill(k - 1)(0l)
+		
+		for(i <- 1 to n - 1){
+			ages = List(ages.drop(1).sum) ++ ages.dropRight(1)
+		}
+		
+		ages.sum
+	}                                         //> rabCycle: (n: Int, k: Int)Long
+	
 	val data = "81 16"                        //> data  : String = 81 16
 	val Array(n, k) = data.split("\\s")       //> n  : String = 81
                                                   //| k  : String = 16
 	rab(n.toInt, k.toInt)                     //> res0: Long = 37378265960028808
+	rabCycle(n.toInt, k.toInt)                //> res1: Long = 37378265960028808
+	
 }
