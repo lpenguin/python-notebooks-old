@@ -1,7 +1,7 @@
 object foo {
-	import rosalind.ListCombinatorics._
-	import rosalind.IntCombinatorics._
-	import rosalind.StringUtils._
+	import rosalind.util.ListCombinatorics._
+	import rosalind.util.IntCombinatorics._
+	import rosalind.util.StringUtils._
 	
 	val (s1, s2) = ("AAATTTT", "TTTTCCC")     //> s1  : String = AAATTTT
                                                   //| s2  : String = TTTTCCC

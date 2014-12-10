@@ -1,5 +1,5 @@
 object lia {
-  import rosalind.IntCombinatorics._
+  import rosalind.util.IntCombinatorics._
   
   val data = "6 17"                               //> data  : String = 6 17
   val Array(k, n) = data.split("\\s+")            //> k  : String = 6

@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object StringUtils {
   def overlaps(withSuffix:String, withPrefix:String, k:Int):Boolean = {

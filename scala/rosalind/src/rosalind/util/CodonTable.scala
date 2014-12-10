@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object CodonTable {
   private val codonTableStr:String = """UUU F      CUU L      AUU I      GUU V

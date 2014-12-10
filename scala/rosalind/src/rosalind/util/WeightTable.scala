@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object WeightTable {
   private val tableStr = """A   71.03711

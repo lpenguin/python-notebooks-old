@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object FastaReader {
   class FastaRecord(val name:String, val value: String)

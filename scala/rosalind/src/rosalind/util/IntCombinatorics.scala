@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object IntCombinatorics {
 

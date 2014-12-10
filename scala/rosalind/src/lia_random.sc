@@ -1,5 +1,5 @@
 object lia {
-	import rosalind.IntCombinatorics._
+	import rosalind.util.IntCombinatorics._
 	
 	object Allel extends Enumeration {
 		type Allel = Value

@@ -1,4 +1,4 @@
-package rosalind
+package rosalind.util
 
 object ListCombinatorics {
   def combinations[T](values:List[T], count:Int):List[List[T]] = count match {
