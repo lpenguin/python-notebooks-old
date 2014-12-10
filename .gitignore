@@ -2,3 +2,6 @@ scala/bin
 scala/bin
 scala/.idea/
 scala/rosalind/.idea
+.ipynb_checkpoints
+scala/rosalind/.worksheet
+scala/rosalind/.cache

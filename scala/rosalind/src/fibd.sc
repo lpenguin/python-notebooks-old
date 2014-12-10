@@ -21,6 +21,8 @@ object fibd {
 
 	}                                         //> rab: (n: Int, k: Int)Long
 	
+	
+	// Solution from rosalind (python)
 	def rabCycle(n:Int, k:Int):Long = {
 		var ages = List(1l) ++ List.fill(k - 1)(0l)
 		
