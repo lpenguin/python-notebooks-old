@@ -1,15 +1,14 @@
-package rosalind
+package rosalind.assignments
 
-import rosalind.graphs.{GraphVisWriter, SimpleGraphWriter, Node, Graph}
+import rosalind.graphs.{Graph, GraphVisWriter, Node, SimpleGraphWriter}
 import rosalind.util.FastaReader._
-import rosalind.util.ListCombinatorics._
 import rosalind.util.StringUtils._
 
 object grph {
 
 
   def main (args: Array[String]) {
-    val nodes = readFasta("/home/nikita/sources/ipnb/python-notebooks/scala/rosalind/rosalind_grph.txt")
+    val nodes = fromFile("/home/nikita/sources/ipnb/python-notebooks/scala/rosalind/rosalind_grph.txt")
 
     val graph = new Graph(nodes.map((n) => new Node(n.name, n.value)))
     val k = 3
