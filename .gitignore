@@ -5,3 +5,5 @@ scala/rosalind/.idea
 .ipynb_checkpoints
 scala/rosalind/.worksheet
 scala/rosalind/.cache
+scala/rosalind/out
+scala/rosalind/tmp/

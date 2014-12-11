@@ -1,6 +1,4 @@
-package rosalind.util
-
-import java.util
+package rosalind.graphs
 
 import scala.collection.mutable
 
@@ -12,11 +10,15 @@ case class Node(name:String, value:String){
   def ==(n:Node): Boolean ={
     name == n.name
   }
+
+  def shortValue(k:Int) =
+    if(value.length <= k+3) value
+    else value.take(k)+"..."+value.takeRight(k)
 }
 case class Edge(n1:Node, n2:Node) {
   def ==(e:Edge):Boolean = e.n1 == n1 && e.n2 == n2
 }
-class GraphViz(val nodesList:List[Node]) {
+class Graph(val nodesList:List[Node]) {
   private val _nodes = new mutable.MutableList[Node]()
   _nodes ++= nodesList
 

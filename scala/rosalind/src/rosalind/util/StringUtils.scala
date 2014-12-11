@@ -2,9 +2,14 @@ package rosalind.util
 
 object StringUtils {
   def overlaps(withSuffix:String, withPrefix:String, k:Int):Boolean = {
+    if(withPrefix == withSuffix){
+      false
+    }else{
       val suffix = withSuffix.takeRight(k)
       val prefix = withPrefix.take(k)
-      return suffix == prefix 
+      suffix == prefix
+    }
+
   }
   
   implicit def StringUtilsExtension(s:String) = new {

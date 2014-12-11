@@ -1,4 +1,4 @@
-package rosalind.util
+package rosalind.graphs
 
 import java.io.FileWriter
 
@@ -7,8 +7,8 @@ import java.io.FileWriter
  */
 
 
-object GraphVisWriter {
-  def write(graph:GraphViz, name:String, toFile:String) = {
+object GraphVisWriter extends GraphWriter{
+  def write(graph:Graph, name:String, toFile:String) = {
     val fw = new FileWriter(toFile)
 
     writeHeader()
@@ -30,11 +30,12 @@ object GraphVisWriter {
     }
 
     def writeNode(node:Node) = {
-      fw.write(s"  \"${node.name} [label=\"${node.name}\n${node.value}\"]\";\n")
+      fw.write("  \""+node.name+"\" [label=\""+node.name+" - "+node.shortValue(3)+"\"];\n")
     }
 
     def writeEdge(edge:Edge) = {
-      fw.write(s"\"${edge.n1.name}\" -> \"${edge.n2.name}\";\n")
+//      fw.write(s"${edge.n1.name} -> ${edge.n2.name};")
+      fw.write(s"""  "${edge.n1.name}" -> "${edge.n2.name}";\n""")
     }
   }
 
