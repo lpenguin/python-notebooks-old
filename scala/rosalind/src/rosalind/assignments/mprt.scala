@@ -4,8 +4,6 @@ import rosalind.util.{OutputWriter, FastaReader}
 
 import scala.io.Source
 
-import collection.mutable.{ HashMap, MultiMap, Set }
-import collection.mutable
 /**
  * Created by nikita on 11.12.14.
  */
@@ -17,11 +15,11 @@ object mprt {
       FastaReader.fromUrl(uniprotUrl+name+".fasta").head
     }
 
-    val dataset = Source.fromFile("./data/rosalind_mprt_sample.txt").getLines()
+    val dataSet = Source.fromFile("./data/rosalind_mprt_sample.txt").getLines()
     val motifPattern = """(?=N[^P][ST][^P])""".r
 
     val ow = new OutputWriter("mprt", printlnResult = true)
-    for(line <- dataset) {
+    for(line <- dataSet) {
       val matches = motifPattern findAllMatchIn downloadFasta(line).value
       if(matches.nonEmpty){
         ow.writeln(line)

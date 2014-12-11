@@ -15,5 +15,9 @@ object foo {
 	l choose 2                                //> res5: List[List[String]] = List(List(a, b), List(a, c), List(a, d), List(a, 
                                                   //| e), List(a, f), List(b, c), List(b, d), List(b, e), List(b, f), List(c, d), 
                                                   //| List(c, e), List(c, f), List(d, e), List(d, f), List(e, f))
+
+
+  val q = (1, 2) :: (3, 4) :: Nil
+	q.map( _._1 )
  
 }
