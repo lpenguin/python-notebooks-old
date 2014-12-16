@@ -10,7 +10,7 @@ object foo {
 	"a" :: l                                  //> res1: List[String] = List(a, a, b, c, d, e, f)
 	
 	l.dropRight(1)                            //> res2: List[String] = List(a, b, c, d, e)
-	combinations(l, 4).size                   //> res3: Int = 15
+	combinations(l, 4).size                   //> res3:q Int = 15
 	l.size choose 4                           //> res4: scala.math.BigDecimal = 15
 	l choose 2                                //> res5: List[List[String]] = List(List(a, b), List(a, c), List(a, d), List(a, 
                                                   //| e), List(a, f), List(b, c), List(b, d), List(b, e), List(b, f), List(c, d), 
