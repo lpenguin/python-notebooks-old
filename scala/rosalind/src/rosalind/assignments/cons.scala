@@ -15,7 +15,7 @@ object cons {
     val ll = fromData("rosalind_cons") map ( r => r.value.toCharArray)
 
     val counts = ll.transpose.map(l => {
-      l.groupBy(l => l).map((t) => (t._1, t._2.length) )
+      l groupBy (l => l) map (t => (t._1, t._2.length) )
     })
 
 
