@@ -1,15 +1,19 @@
 package rosalind.util
 
 import java.io.FileWriter
+import java.io.File
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
-
+import rosalind.util.File._
 object FastaReader {
   class FastaRecord(val name:String, val value: String){
-    override def toString = ">"+name+"\n"+value
+    override def toString = ">"+name+": "+value
   }
-  
+
+  def fromData(name:String) = {
+    fromFile(s"${getCurrentDirectory}/data/${name}.txt")
+  }
   
   def fromFile(path:String):List[FastaRecord] = {
     fromLines(Source.fromFile(path).getLines())

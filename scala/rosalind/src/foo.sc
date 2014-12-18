@@ -6,7 +6,7 @@ object foo {
 	)
 
 	ll.transpose.map(l => {
-		val lens = l.groupBy(l => l).map((t) => (t._1, t._2.length) )
+		val lens = l groupBy(l => l) map ((t) => (t._1, t._2.length) )
 
 		(
 			lens.getOrElse('A', 0),
