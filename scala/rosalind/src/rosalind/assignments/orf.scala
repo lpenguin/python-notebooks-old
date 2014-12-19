@@ -13,8 +13,6 @@ object orf {
   http://rosalind.info/problems/orf/
   */
   def main(args: Array[String]) {
-
-
     def findGenes(s:Stream[Char]):List[String] = s match {
       case 'M'#::xs =>
         val (gene, rest) = cropGene(s)
