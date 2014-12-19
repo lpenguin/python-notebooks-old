@@ -9,6 +9,9 @@ import rosalind.util.FastaReader
 import rosalind.util.CodonTable
 
 object orf {
+  /*
+  http://rosalind.info/problems/orf/
+  */
   def main(args: Array[String]) {
 
 
