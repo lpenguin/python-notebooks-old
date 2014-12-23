@@ -20,7 +20,7 @@ object cons {
 
 
     val ow = new OutputWriter("rosalind_cons", true)
-    ow writeln (counts map (c => c.maxBy((t) => t._2)._1) mkString "")
+    ow writeln (counts map (c => c.maxBy((t) => t._2)._1) mkString)
     for(nuc <- List('A', 'C', 'G', 'T')){
       ow writeln (nuc+": "+(counts map (c => c.getOrElse(nuc, 0)) mkString " "))
     }

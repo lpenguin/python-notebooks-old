@@ -6,7 +6,7 @@ import rosalind.util.File._
  * Created by nikita on 11.12.14.
  */
 class OutputWriter(name:String, printlnResult:Boolean = false) {
-  var fw = new FileWriter(s"$getCurrentDirectory/data/output_$name.txt")
+  val fw = new FileWriter(s"$getCurrentDirectory/data/output_$name.txt")
 
   def writeln(line:String) = {
     fw.write(line+"\n")

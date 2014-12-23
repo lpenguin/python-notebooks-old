@@ -15,7 +15,7 @@ object orf {
   def main(args: Array[String]) {
     def findGenes(s:Stream[Char]):List[String] = s match {
       case 'M'#::xs =>
-        val (gene, rest) = cropGene(s)
+        val (gene, rest) = s span (_ != '_')
         if(rest.isEmpty){
           Nil
         }else{
@@ -24,10 +24,6 @@ object orf {
       case x#::xs => findGenes(xs)
       case Stream() => Nil
 
-    }
-
-    def cropGene(s:Stream[Char]) = {
-      s span (_ != '_')
     }
 
     def translateGene(s:Stream[Char]) = {
@@ -55,7 +51,5 @@ object orf {
         }
       }
     }
-
-//    set foreach println
   }
 }
