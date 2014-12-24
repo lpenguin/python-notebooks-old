@@ -8,7 +8,7 @@ import java.io.FileWriter
 
 
 object GraphVisWriter extends GraphWriter{
-  def write(graph:Graph, name:String, toFile:String) = {
+  def write(graph:Graphable, name:String, toFile:String) = {
     val fw = new FileWriter(toFile)
 
     writeHeader()
@@ -30,12 +30,13 @@ object GraphVisWriter extends GraphWriter{
     }
 
     def writeNode(node:Node) = {
-      fw.write("  \""+node.name+"\" [label=\""+node.name+" - "+node.shortValue(3)+"\"];\n")
+//      fw.write("  \""+node.id+"\";\n")
+      fw.write(s"""  "${node.id}" [label="${node.label}"] """)
     }
 
     def writeEdge(edge:Edge) = {
 //      fw.write(s"${edge.n1.name} -> ${edge.n2.name};")
-      fw.write(s"""  "${edge.n1.name}" -> "${edge.n2.name}";\n""")
+      fw.write(s"""  "${edge.n1.id}" -> "${edge.n2.id}";\n""")
     }
   }
 

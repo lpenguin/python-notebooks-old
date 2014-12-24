@@ -10,7 +10,10 @@ object grph {
   def main (args: Array[String]) {
     val nodes = fromFile("/home/nikita/sources/ipnb/python-notebooks/scala/rosalind/rosalind_grph.txt")
 
-    val graph = new Graph(nodes map ( n => new Node(n.name, n.value)) )
+    val graph = new Graph(nodes map ( n => new Node {
+      override def id: String = n.name
+      override def label: String = n.value
+    }))
     val k = 3
 
 

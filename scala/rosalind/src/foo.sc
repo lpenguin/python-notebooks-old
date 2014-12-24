@@ -1,24 +1,25 @@
 object foo {
-	val ll = List(
-		"CCTG".toCharArray,
-		"AGTG".toCharArray,
-		"ACGA".toCharArray
-	)
 
-	ll.transpose.map(l => {
-		val lens = l groupBy(l => l) map ((t) => (t._1, t._2.length) )
+  val s1 = "a"
+  val s2 = "abq"
+  val (eq, noteq) = s1 zipAll (s2, '-', '-') span ( t => t._1 == t._2)
+  eq map (_._1)
+  val (a, b) = noteq unzip
+  def prefixDiff(s1:String, s2:String):(String, String, String) = {
+    val marker = '-'
+    val (eq, noteq) = s1.toStream zipAll (s2.toStream, marker, marker) span (t => t._1 == t._2)
+    val (d1, d2) = noteq.unzip
+    (eq map (_._1) mkString,
+      d1 takeWhile ( _ != '-' ) mkString, d2 takeWhile ( _ != marker ) mkString)
+  }
 
-		(
-			lens.getOrElse('A', 0),
-			lens.getOrElse('C', 0),
-			lens.getOrElse('T', 0),
-			lens.getOrElse('G', 0)
-			)
-	})
+  prefixDiff(s1, s2)
 
-	val q = List(1, 2, 3, 4, 5)
-	q span (_ != 3)
+  import scala.collection.immutable.Stream.Empty
+  def iter(s:Stream[Char]):List[String] = s match {
+    case Empty => Nil
+    case x#::xs => s.mkString :: iter(xs)
+  }
 
-	"MLLGSFRLIPKETLIQVAGSSPCNLS".size * 3
-	"AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG".size
+  iter("abcd".toStream)
 }
