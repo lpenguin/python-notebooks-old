@@ -12,6 +12,10 @@ trait Node{
     id == n.id
   }
 
+  def != (n:Node): Boolean ={
+    id != n.id
+  }
+
   def shortValue(k:Int) =
     if(label.isEmpty) id
     else if(label.length <= k+3) label
@@ -21,7 +25,7 @@ trait Node{
 }
 
 case class Edge(n1:Node, n2:Node){
-  assert(n1 != n2, "No circular nodes")
+  assert(n1 != n2, s"No circular nodes: ${n1.id} ${n2.id} n1: $n1 n2: $n2")
   def ==(e:Edge):Boolean = e.n1 == n1 && e.n2 == n2
 }
 

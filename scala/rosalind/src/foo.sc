@@ -20,6 +20,9 @@ object foo {
     case Empty => Nil
     case x#::xs => s.mkString :: iter(xs)
   }
+  val x = Set(1, 2, 3)
+  val y = Set(2, 1, 31)
+  x == y
 
-  iter("abcd".toStream)
+  "123".last.toString.toInt
 }

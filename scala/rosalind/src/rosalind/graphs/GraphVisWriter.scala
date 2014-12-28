@@ -22,6 +22,7 @@ object GraphVisWriter extends GraphWriter{
     fw.close()
 
     def writeHeader() = {
+      fw.write("rankdir=LR; node[shape=box fillcolor=gray95 style=filled]\n")
       fw.write(s"digraph $name {\n")
     }
 
@@ -31,7 +32,7 @@ object GraphVisWriter extends GraphWriter{
 
     def writeNode(node:Node) = {
 //      fw.write("  \""+node.id+"\";\n")
-      fw.write(s"""  "${node.id}" [label="${node.label}"] """)
+      fw.write(s"""  "${node.id}" [label="${node.toString}"] """)
     }
 
     def writeEdge(edge:Edge) = {

@@ -39,22 +39,55 @@ object lcsm {
 
   def main(args: Array[String]) {
 
-    def addToTree(t:Tree, s:String):Unit = {
+    def longestSuffix(t:Tree, matchNums:Set[Int]) = {
+      def stringNum(n:TreeNode) = n.label takeRight 1 toInt
+
+      var maxLen = 0
+      var suffixes = Set[String]()
+
+      def iterNode(n:TreeNode, prevSuffix:String): Set[Int] = {
+        val suffix = prevSuffix + n.label
+        val commonLen = suffix.length
+
+        val nums = n.leafs match {
+          case Nil => Set(stringNum(n))
+          case xs => xs flatMap (l => iterNode(l, suffix)) toSet
+        }
+        if(nums == matchNums){
+          if(commonLen == maxLen){
+            suffixes = suffixes + suffix
+          }else {
+            if(commonLen > maxLen){
+              maxLen = commonLen
+              suffixes = Set[String](suffix)
+            }
+          }
+        }
+        nums
+      }
+      iterNode(t.root, "")
+      suffixes
+    }
+
+    def addToTree(t:Tree, suffix:String, suffixIndex:Int):Unit = {
+//      println(s"addToTree $suffix $suffixIndex")
       def addToNode(node: TreeNode, matchRes:(String, String, String)): Unit ={
         val (common:String, nodeRest:String, stringRest:String) = matchRes
         if(nodeRest.nonEmpty){
           node.label = common
-          node.setLeafs(TreeNode(nodeRest, node.leafs) :: TreeNode(stringRest) :: Nil)
+          node.leafs = TreeNode(nodeRest, node.leafs, node.suffixIndex) :: TreeNode(stringRest, suffixIndex) :: Nil
+          node.suffixIndex = None
         }else{
           findMatch(node.leafs, stringRest) match {
             case Some(x) =>
               addToNode(x._1, x._2)
             case None =>
-              node.addLeaf(TreeNode(stringRest))
+              node.addLeaf(TreeNode(stringRest, suffixIndex))
           }
         }
       }
-      addToNode(t.root, ("", "", s))
+      addToNode(t.root, ("", "", suffix))
+      t.root.leafs = t.root.leafs filter ( !_.label.matches("^\\d+"))
     }
 
     def addSuffixes(t:Tree, s:String) = {
@@ -62,30 +95,41 @@ object lcsm {
         case Empty => Nil
         case x#::xs => s.mkString :: iter(xs)
       }
-      iter((s+"$").toStream).reverse.foreach {
-        addToTree(t, _)
+      val suffixStream = iter((s).toStream)
+      for((suffix, suffixIndex) <- suffixStream.reverse.zipWithIndex) {
+        addToTree(t, suffix, suffixIndex)
       }
     }
 
+    def suffixTree(strs:Seq[String]) = {
+      val tree = new Tree(TreeNode(""))
+      var startTime = System.currentTimeMillis()
+      for((str, index) <- strs.zipWithIndex){
+        println(s"Adding string #$index ${(System.currentTimeMillis() - startTime)/1000f}")
+        startTime = System.currentTimeMillis()
+        addSuffixes(tree, str+index.toString)
+      }
+      GraphVisWriter.write(tree, "lscm", s"data/lscm.gv")
+      tree
+    }
 
-    val data = FastaReader.fromData("rosalind_lcsm_sample")
+    def longestCommonString(strs:Seq[String]):Set[String] = {
+      val tree = suffixTree(strs)
+      longestSuffix(tree, strs.indices.toSet)
+    }
 
-//    val root = TreeNode("root", List(
-//      TreeNode("a", List(
-//        TreeNode("b"), TreeNode("c"), TreeNode("d")
-//      )),
-//      TreeNode("e")
-//    ))
-    val tree = new Tree(TreeNode("#"))
-    addSuffixes(tree, "ABAB")
+    val data = FastaReader.fromData("rosalind_lcsm")
+
+    val strings = data map (_.value)
+    println(strings.size)
+    suffixTree(strings)
+//    println(longestCommonString(data map (_.value)).head)
 
 //    addToTree(tree, "abac")
 //    addToTree(tree, "abd")
 //    addToTree(tree, "ace")
 //    addToTree(tree, "abq")
-    for(n <- tree.nodes){
-      println(n)
-    }
-    GraphVisWriter.write(tree, "lscm", s"data/lscm.gv")
+
+
   }
 }

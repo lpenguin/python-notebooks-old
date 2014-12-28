@@ -16,19 +16,34 @@ object SeqInt{
     r
   }
 }
-case class TreeNode(var label: String, private val _leafs: List[TreeNode] = Nil) extends rosalind.graphs.Node{
-  def addLeaf(n:TreeNode) = listBuffer += n
 
-  def setLeafs(ls:List[TreeNode]) = {
-    listBuffer.clear()
-    listBuffer ++= ls
+object TreeNode{
+  def apply(label:String) = new TreeNode(label)
+  def apply(label:String, suffixIndex:Int) = new TreeNode(label, Nil, Some(suffixIndex))
+  def apply(label:String, leafs: List[TreeNode]) = new TreeNode(label, leafs)
+  def apply(label:String, leafs: List[TreeNode], suffixIndex:Option[Int]) = new TreeNode(label, leafs, suffixIndex)
+}
+
+class TreeNode(var label: String, _leafs: List[TreeNode] = List.empty, var suffixIndex:Option[Int] = None) extends rosalind.graphs.Node{
+  def addLeaf(n:TreeNode) = leafBuffer += n
+
+  def leafs_=(ls:List[TreeNode]) = {
+    leafBuffer.clear()
+    leafBuffer ++= ls
   }
 
-  private var listBuffer = new ListBuffer[TreeNode]
-  listBuffer ++= _leafs
-  def leafs = listBuffer.toList
+  private var leafBuffer = new ListBuffer[TreeNode] ++ _leafs
+
+  def leafs = leafBuffer.toList
 
   val id: String = SeqInt.next().toString
+
+  override def toString = suffixIndex match {
+    case _ => label
+//    case Some(s) => s"$label ($s)"
+  }
+
+  def isLeaf = leafBuffer.isEmpty
 }
 
 class Tree(val root:TreeNode) extends Graphable{
