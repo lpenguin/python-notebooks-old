@@ -1,7 +1,7 @@
 package rosalind.assignments
 
 import rosalind.graphs.{GraphVisWriter, TreeNode, Tree}
-import rosalind.util.{FastaReader}
+import rosalind.util.{TreePrinter, FastaReader}
 import rosalind.util.Profiler._
 import rosalind.graphs.tparty.SimpleSuffixTree
 
@@ -30,35 +30,40 @@ object lcsm2 {
     }
 
     def addToTree(tree:Tree, suffix:Stream[Char]) = {
-      def findNode(n:TreeNode, suffix:Stream[Char]):Option[(TreeNode, Stream[Char])] = {
+      def findNode(n:TreeNode, suffix:Stream[Char]):(TreeNode, Stream[Char]) = {
         if(suffix.isEmpty){
-          Some((n, suffix))
+          (n, suffix)
         }else{
           val head = suffix.head
           n.leafs find (l => l.label.head == head) match {
-            case None => Some((n, suffix))
+            case None => (n, suffix)
             case Some(x) => findNode(x, suffix.tail)
           }
         }
-
-      }
-      findNode(tree.root, suffix) match {
-        case None => println("None found")
-        case Some(x) =>
-          println(x._1.label, x._2.mkString)
       }
 
+      def addToNode(parent:TreeNode, suffix:Stream[Char]):Unit = suffix match {
+        case Empty =>
+        case x#::xs =>
+          val node = TreeNode(x.toString)
+          parent.addLeaf(node)
+          addToNode(node, xs)
+      }
+
+      val (node, newSuffix) = findNode(tree.root, suffix)
+      addToNode(node, newSuffix)
     }
 
     val data = FastaReader.fromData("rosalind_lcsm")
 
-    val tree = new Tree(TreeNode("ROOT", List(
-      TreeNode("a", List(
-        TreeNode("b", List(TreeNode("c",
-          List(TreeNode("d")))))))
-    )))
+    val tree = new Tree(TreeNode("ROOT"))
+//    val tree = new Tree(TreeNode("ROOT", List(
+//      TreeNode("a", List(
+//        TreeNode("b"), TreeNode("c"))))))
 
-    addToTree(tree, "abcda".toStream)
+    addToTree(tree, "abc0".toStream)
+    addToTree(tree, "abcda1".toStream)
+    TreePrinter.print(tree)
     GraphVisWriter.write(tree, "ff", "ff.gv")
 //    suffixes(data.head.value) foreach (x => println(x.mkString))
   }
