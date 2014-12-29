@@ -20,9 +20,8 @@ object foo {
     case Empty => Nil
     case x#::xs => s.mkString :: iter(xs)
   }
-  val x = Set(1, 2, 3)
-  val y = Set(2, 1, 31)
-  x == y
 
-  "123".last.toString.toInt
+  val x = (1, 0)
+  val y = (0, 1)
+
 }
