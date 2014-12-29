@@ -13,22 +13,22 @@ object lcsm {
   http://rosalind.info/problems/lcsm/
    */
 
-  def prefixDiff(s1:Stream[Char], s2:Stream[Char]):(String, String, String) = {
+  def prefixDiff(s1:Stream[Char], s2:Stream[Char]):(Stream[Char], Stream[Char], Stream[Char]) = {
     val marker = '-'
     val (eq, noteq) = s1 zipAll (s2, marker, marker) span (t => t._1 == t._2)
     val (d1, d2) = noteq.unzip
-    (eq map (_._1) mkString,
-      d1 takeWhile ( _ != marker ) mkString, d2 takeWhile ( _ != marker ) mkString)
+    (eq map (_._1),
+      d1 takeWhile ( _ != marker ), d2 takeWhile ( _ != marker ))
   }
 
 
   def findMatch(leafs:List[TreeNode], str:String) = {
-    leafs.foldLeft[Option[(TreeNode, (String, String, String))]](None) {(acc, leaf) =>
+    leafs.foldLeft[Option[(TreeNode, (Stream[Char], Stream[Char], Stream[Char]))]](None) {(acc, leaf) =>
       acc match {
         case Some(_) => acc
         case None =>
           val (c, n, s) = prefixDiff(leaf.label.toStream, str.toStream)
-          if(!c.isEmpty){
+          if(c.nonEmpty){
             Some(leaf, (c, n, s))
           }else{
             None
@@ -71,23 +71,23 @@ object lcsm {
 
     def addToTree(t:Tree, suffix:String, suffixIndex:Int):Unit = {
 //      println(s"addToTree $suffix $suffixIndex")
-      def addToNode(node: TreeNode, matchRes:(String, String, String)): Unit ={
-        val (common:String, nodeRest:String, stringRest:String) = matchRes
+      def addToNode(node: TreeNode, matchRes:(Stream[Char], Stream[Char], Stream[Char])): Unit ={
+        val (common:Stream[Char], nodeRest:Stream[Char], stringRest:Stream[Char]) = matchRes
         if(nodeRest.nonEmpty){
-          node.label = common
-          node.leafs = TreeNode(nodeRest, node.leafs, node.suffixIndex) :: TreeNode(stringRest, suffixIndex) :: Nil
+          node.label = common.mkString
+          node.leafs = TreeNode(nodeRest.mkString, node.leafs, node.suffixIndex) :: TreeNode(stringRest.mkString, suffixIndex) :: Nil
           node.suffixIndex = None
         }else{
-          findMatch(node.leafs, stringRest) match {
+          findMatch(node.leafs, stringRest.mkString) match {
             case Some(x) =>
               addToNode(x._1, x._2)
             case None =>
-              node.addLeaf(TreeNode(stringRest, suffixIndex))
+              node.addLeaf(TreeNode(stringRest.mkString, suffixIndex))
           }
         }
       }
-      addToNode(t.root, ("", "", suffix))
-      t.root.leafs = t.root.leafs filter ( !_.label.matches("^\\d+"))
+      addToNode(t.root, (Empty, Empty, suffix.toStream))
+//      t.root.leafs = t.root.leafs filter ( !_.label.matches("^\\d+"))
     }
 
     def addSuffixes(t:Tree, s:String) = {
@@ -96,7 +96,7 @@ object lcsm {
         case x#::xs => s.mkString :: iter(xs)
       }
       val suffixStream = iter((s).toStream)
-      for((suffix, suffixIndex) <- suffixStream.reverse.zipWithIndex) {
+      for((suffix, suffixIndex) <- suffixStream.zipWithIndex) {
         addToTree(t, suffix, suffixIndex)
       }
     }

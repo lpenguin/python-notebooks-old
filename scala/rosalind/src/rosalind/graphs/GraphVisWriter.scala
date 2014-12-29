@@ -32,7 +32,7 @@ object GraphVisWriter extends GraphWriter{
 
     def writeNode(node:Node) = {
 //      fw.write("  \""+node.id+"\";\n")
-      fw.write(s"""  "${node.id}" [label="${node.toString}"] """)
+      fw.write(s"""  "${node.id}" [label="${node.toString}"];\n""")
     }
 
     def writeEdge(edge:Edge) = {
