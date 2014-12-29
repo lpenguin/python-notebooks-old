@@ -12,7 +12,7 @@ object TreePrinter {
 
   private def printNode(node:TreeNode, isLast:Boolean):List[String] = {
     val indent = if(isLast) "   " else "|  "
-    val name= s"|->${node.label}"
+    val name= s"|->$node"
 
     def iter(childs:List[TreeNode]):List[String] = childs match {
       case Nil => Nil

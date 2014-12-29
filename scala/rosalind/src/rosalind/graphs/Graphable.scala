@@ -6,7 +6,7 @@ package rosalind.graphs
 
 trait Node{
   def id:String
-  def label:String
+  def label:String = ""
 
   def ==(n:Node): Boolean ={
     id == n.id
