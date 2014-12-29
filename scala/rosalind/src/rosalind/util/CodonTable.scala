@@ -56,5 +56,12 @@ TGG W      CGG R      AGG R      GGG G"""
   val rna = codonStringToTable(rnaCodonTableStr)
   val dna = codonStringToTable(dnaCodonTableStr)
 
+  def translateGene(map:Map[String, Char])(s:Stream[Char]) = {
+    s sliding (3, 3) filter (_.size == 3) map (triplet => map(triplet.mkString)) toStream
+  }
+
+  def translateGeneDna(s:Stream[Char]) = translateGene(dna)(s)
+
+  def translateGeneRna(s:Stream[Char]) = translateGene(rna)(s)
 
 }

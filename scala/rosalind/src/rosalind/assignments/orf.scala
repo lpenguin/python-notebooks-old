@@ -26,9 +26,7 @@ object orf {
 
     }
 
-    def translateGene(s:Stream[Char]) = {
-      s sliding (3, 3) filter (_.size == 3) map (triplet => CodonTable.dna(triplet.mkString)) toStream
-    }
+
 
     val dnaString = FastaReader.fromData("rosalind_orf_sample").head.value
 
@@ -45,7 +43,7 @@ object orf {
     val set = new scala.collection.mutable.LinkedHashSet[String]
 
     for(seq <- ss){
-      findGenes(translateGene(seq)) foreach {q =>
+      findGenes(CodonTable.translateGeneDna(seq)) foreach {q =>
         if(set.add(q)){
           println(q)
         }
