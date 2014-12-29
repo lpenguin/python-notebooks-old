@@ -20,31 +20,25 @@ object SuffixTree {
 
 }
 trait SuffixTree extends Tree{
-
   def add(strs:Seq[String]):Unit = {
     strs.zipWithIndex foreach { case (s, i) =>
-      add((s+"$").toStream)
+      addString((s+i).toStream, i)
     }
   }
 
-  def add(str:String):Unit = add(str.toStream)
+  def addString(str:String, stringIndex:Int):Unit = addString(str.toStream, stringIndex)
 
-  def add(str:Stream[Char]):Unit = {
-    SuffixTree.suffixes(str) foreach addSuffix
-    root.leafs = root.leafs filter ( !_.value.mkString.matches("^\\d+$"))
+  def addString(str:Stream[Char], stringIndex:Int):Unit = {
+    SuffixTree.suffixes(str) foreach (s => addSuffix(s, stringIndex))
+    root.leafs = root.leafs filter ( !_.value.mkString.matches("\\$$"))
   }
 
   def longestCommonString(strs:Seq[String]):Set[String] = {
     add(strs)
-    println(strs.indices.toSet.min)
     longestSuffix(strs.indices.toSet)
   }
 
   private def longestSuffix(matchNums:Set[Int]) = {
-    def stringNum(n:TreeNode) = {
-      n.value.takeRight(1).mkString.toInt
-    }
-
     var maxLen = 0
     var suffixes = Set[String]()
 
@@ -53,7 +47,7 @@ trait SuffixTree extends Tree{
       val commonLen = suffix.length
 
       val nums = n.leafs match {
-        case Nil => Set(stringNum(n))
+        case Nil => Set(n.stringIndex.get)
         case xs => xs flatMap (l => iterNode(l, suffix)) toSet
       }
       if(nums == matchNums){
@@ -73,16 +67,13 @@ trait SuffixTree extends Tree{
   }
 
   def stringIndicies = {
-    def stringNum(n:TreeNode) = {
-      n.value.takeRight(1).mkString.toInt
-    }
 
     def iterNode(n:TreeNode, prevSuffix:String): Set[Int] = {
       val suffix = prevSuffix + n.value.mkString
       val commonLen = suffix.length
 
       val nums = n.leafs match {
-        case Nil => Set(stringNum(n))
+        case Nil => Set(n.stringIndex.get)
         case xs => xs flatMap (l => iterNode(l, suffix)) toSet
       }
       nums
@@ -91,9 +82,9 @@ trait SuffixTree extends Tree{
   }
 
 
-  def addSuffix(suffix:String):Unit = addSuffix(suffix.toStream)
+  def addSuffix(suffix:String, stringIndex:Int):Unit = addSuffix(suffix.toStream, stringIndex)
 
-  def addSuffix(suffix:Stream[Char]):Unit = {
+  def addSuffix(suffix:Stream[Char], stringIndex:Int):Unit = {
     class StringDiff(val common:Stream[Char], val diff1:Stream[Char], val diff2:Stream[Char])
 
     def prefixDiff(s1:Stream[Char], s2:Stream[Char]):StringDiff = {
@@ -146,13 +137,21 @@ trait SuffixTree extends Tree{
     }
 
     def addToNode(parent:TreeNode, stringDiff:StringDiff):Unit = {
+      val sd = stringDiff
+//      println(s"common: ${sd.common.mkString} s1: ${sd.diff1.mkString} s2: ${sd.diff2.mkString}")
       parent.value = stringDiff.common
       if(stringDiff.diff1.isEmpty){
-        parent.addLeaf(TreeNode(stringDiff.diff2))
+        if(stringDiff.diff2.nonEmpty || parent.stringIndex.get != stringIndex){
+          parent.addLeaf(TreeNode(stringDiff.diff2, stringIndex))
+        }
       }else{
         val leafs = parent.leafs
-
-        parent.leafs = if(stringDiff.diff2.isEmpty) List(TreeNode(stringDiff.diff1, leafs)) else List(TreeNode(stringDiff.diff1, leafs), TreeNode(stringDiff.diff2))
+        val parentIndex = parent.stringIndex
+        parent.stringIndex = None
+        parent.leafs = if(stringDiff.diff2.isEmpty)
+          List(TreeNode(stringDiff.diff1, stringIndex, leafs))
+        else
+          List(TreeNode(stringDiff.diff1, parentIndex, leafs), TreeNode(stringDiff.diff2, stringIndex))
       }
     }
 

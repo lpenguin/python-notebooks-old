@@ -18,12 +18,13 @@ object SeqInt{
 }
 
 object TreeNode{
-  def apply(value: Stream[Char]) = new TreeNode(value)
-  def apply(value: Stream[Char], leafs: List[TreeNode]) = new TreeNode(value, leafs)
-//  def apply(value: Stream[Char], leafs: List[TreeNode], suffixIndex:Option[Int]) = new TreeNode(value, leafs)
+  def apply(value: Stream[Char]) = new TreeNode(value, None)
+  def apply(value: Stream[Char], stringIndex:Int) = new TreeNode(value, Some(stringIndex))
+  def apply(value: Stream[Char], stringIndex:Int, leafs: List[TreeNode]) = new TreeNode(value, Some(stringIndex), leafs)
+  def apply(value: Stream[Char], stringIndex:Option[Int], leafs: List[TreeNode]) = new TreeNode(value, stringIndex, leafs)
 }
 
-class TreeNode(var value: Stream[Char], _leafs: List[TreeNode] = List.empty) extends rosalind.graphs.Node{
+class TreeNode(var value: Stream[Char], var stringIndex:Option[Int], _leafs: List[TreeNode] = List.empty) extends rosalind.graphs.Node{
   def addLeaf(n:TreeNode) = leafBuffer += n
 
   def leafs_=(ls:List[TreeNode]) = {
@@ -37,7 +38,10 @@ class TreeNode(var value: Stream[Char], _leafs: List[TreeNode] = List.empty) ext
 
   val id: String = SeqInt.next().toString
 
-  override def toString = value.mkString
+  override def toString = stringIndex match {
+    case None => value.mkString
+    case Some(i) => value.mkString +" "+i
+  }
 
   def isLeaf = leafBuffer.isEmpty
 }
