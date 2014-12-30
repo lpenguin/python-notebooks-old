@@ -1,9 +1,4 @@
-package rosalind.assignments
-
-import rosalind.graphs.{TreeNode, Tree, GraphVisWriter, Graph}
-import rosalind.util.FastaReader
-
-import scala.collection.immutable.Stream.Empty
+package rosalind.assignments.rosalind
 
 /**
  * Created by nikita on 23.12.14.

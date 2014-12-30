@@ -1,4 +1,4 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
 import scala.collection.mutable
 import scala.util.Random

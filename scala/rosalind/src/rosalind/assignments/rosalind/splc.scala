@@ -1,4 +1,4 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
 import rosalind.util.{CodonTable, FastaReader}
 

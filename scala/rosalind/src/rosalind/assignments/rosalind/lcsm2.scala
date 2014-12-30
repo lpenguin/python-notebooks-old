@@ -1,13 +1,8 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
-import rosalind.graphs.{SuffixTree, GraphVisWriter, TreeNode, Tree}
-import rosalind.util.{TreePrinter, FastaReader}
+import rosalind.graphs.{SuffixTree, Tree, TreeNode}
+import rosalind.util.FastaReader
 import rosalind.util.Profiler._
-import rosalind.graphs.tparty.SimpleSuffixTree
-import sun.misc.GC
-
-import scala.collection.immutable.Stream.Empty
-import scala.collection.mutable.ListBuffer
 
 /**
  * Created by nikita on 28.12.14.

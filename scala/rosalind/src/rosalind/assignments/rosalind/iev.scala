@@ -1,4 +1,4 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
 /**
  * Created by nikita on 16.12.14.

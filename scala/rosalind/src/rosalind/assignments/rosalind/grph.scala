@@ -1,4 +1,4 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
 import rosalind.graphs.{Graph, GraphVisWriter, Node, SimpleGraphWriter}
 import rosalind.util.FastaReader._

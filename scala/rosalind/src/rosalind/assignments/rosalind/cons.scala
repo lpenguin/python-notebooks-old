@@ -1,4 +1,6 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
+import rosalind.util.FastaReader._
+import rosalind.util.OutputWriter
 
 /**
  * Created by nikita on 16.12.14.
@@ -7,8 +9,6 @@ object cons {
   /*
   http://rosalind.info/problems/cons/
   */
-  import rosalind.util.FastaReader._
-  import rosalind.util.OutputWriter
   def getCurrentDirectory = new java.io.File( "." ).getCanonicalPath
 
   def main(args: Array[String]) {

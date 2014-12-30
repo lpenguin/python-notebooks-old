@@ -1,6 +1,6 @@
-package rosalind.assignments
+package rosalind.assignments.rosalind
 
-import rosalind.util.{OutputWriter, FastaReader}
+import rosalind.util.{FastaReader, OutputWriter}
 
 import scala.io.Source
 

@@ -23,5 +23,6 @@ object foo {
 
   val x = (1, 0)
   val y = (0, 1)
+  "ACTG".zipWithIndex.toMap
 
 }
