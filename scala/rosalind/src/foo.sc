@@ -1,27 +1,14 @@
-import rosalind.util.StringUtils
 object foo {
-  val s1 = "a"
-  val s2 = "abq"
-  val (eq, noteq) = s1 zipAll (s2, '-', '-') span ( t => t._1 == t._2)
-  eq map (_._1)
-  val (a, b) = noteq unzip
-  def prefixDiff(s1:String, s2:String):(String, String, String) = {
-    val marker = '-'
-    val (eq, noteq) = s1.toStream zipAll (s2.toStream, marker, marker) span (t => t._1 == t._2)
-    val (d1, d2) = noteq.unzip
-    (eq map (_._1) mkString,
-      d1 takeWhile ( _ != '-' ) mkString, d2 takeWhile ( _ != marker ) mkString)
+  val peptide = List (1,    3, 5, 5, 7,    9)
+  val peptide2 = List(1, 2,    5,       8, 9)
+  val peptideMass = peptide.sum
+  val prefixMasses = Array.fill(peptide.size + 1)(0)
+  for((v, i) <- peptide.zipWithIndex){
+    prefixMasses(i + 1) = prefixMasses(i) + v
   }
+  prefixMasses
 
-  prefixDiff(s1, s2)
-  import scala.collection.immutable.Stream.Empty
-  def iter(s:Stream[Char]):List[String] = s match {
-    case Empty => Nil
-    case x#::xs => s.mkString :: iter(xs)
-  }
-
-  val x = (1, 0)
-  val y = (0, 1)
-  "ACTG".zipWithIndex.toMap
-  1 to 4
+  peptide.foldLeft(List(0))((acc, v) => (acc.head+v)::acc ).reverse
+  peptide.length - (peptide diff peptide2).length
+  peptide2.length - (peptide2 diff peptide).length
 }
