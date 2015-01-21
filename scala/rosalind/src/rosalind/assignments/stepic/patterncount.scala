@@ -41,49 +41,16 @@ object patterncount {
     val List(data, count) = Source.fromFile("./data/stepic_fw_1.txt").getLines().toList
     frequentWordsNaive(data, count.toInt) foreach println
 
-    val dict = "ACGT"
-    val symbolsDigit = dict.zipWithIndex.toMap
-    val digitSymbols =symbolsDigit map (f => f.swap)
-
-    def patternToNumber(str:String):Int = {
-      (0 /: str.reverse.zipWithIndex){(acc, v) => acc + symbolsDigit(v._1) * Math.pow(dict.size, v._2).toInt}
-    }
-
-    def numberToPattern(number:Int, patterLength:Int):String = {
-      def iter(number: Int): List[Char] = number match {
-        case 0 => Nil
-        case _ =>
-          val digit = number % dict.size
-          digitSymbols(digit) :: iter(number / dict.size)
-      }
-      val unboundStr = iter(number).reverse.mkString
-      dict.head.toString * (patterLength - unboundStr.size) + unboundStr
-    }
-
-    /*
-      https://stepic.org/lesson/CS-The-Frequency-Array-2994/step/5
-     */
-
-    def computeFrequencyArray(text:String, k:Int):Array[Int] = {
-      val freqArray = Array.fill(Math.pow(dict.size, k).toInt)(0)
-      text sliding k foreach { str =>
-        val num = patternToNumber(str)
-        freqArray(num) += 1
-      }
-      freqArray
-    }
-
     def frequentWords(text:String, k:Int):Seq[String] = {
       val freqArray = computeFrequencyArray(text, k)
       val max = freqArray.max
       freqArray.zipWithIndex filter (_._1 == max) map (f => numberToPattern(f._2, k))
     }
-//    println(patternToNumber("ATGCAA"))
-//    println(numberToPattern(912, 6))
-//    println(numberToPattern(5437, 8))
-    println(s"FreqArray: count: $count")
-    frequentWords(data, count.toInt) foreach println
+    println(patternToNumber("ATGCAA"))
+    println(numberToPattern(912, 6))
+    println(numberToPattern(5437, 8))
     println(computeFrequencyArray(data, count.toInt) mkString " ")
+    frequentWords(data, count.toInt) foreach println
 
 
   }

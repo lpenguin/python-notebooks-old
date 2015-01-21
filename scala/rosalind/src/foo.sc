@@ -1,5 +1,5 @@
+import rosalind.util.StringUtils
 object foo {
-
   val s1 = "a"
   val s2 = "abq"
   val (eq, noteq) = s1 zipAll (s2, '-', '-') span ( t => t._1 == t._2)
@@ -14,7 +14,6 @@ object foo {
   }
 
   prefixDiff(s1, s2)
-
   import scala.collection.immutable.Stream.Empty
   def iter(s:Stream[Char]):List[String] = s match {
     case Empty => Nil
@@ -24,5 +23,5 @@ object foo {
   val x = (1, 0)
   val y = (0, 1)
   "ACTG".zipWithIndex.toMap
-
+  1 to 4
 }
