@@ -66,7 +66,7 @@ object patterncount {
 
     def computeFrequencyArray(text:String, k:Int):Array[Int] = {
       val freqArray = Array.fill(Math.pow(dict.size, k).toInt)(0)
-      text sliding dict.size foreach { str =>
+      text sliding k foreach { str =>
         val num = patternToNumber(str)
         freqArray(num) += 1
       }
@@ -78,11 +78,12 @@ object patterncount {
       val max = freqArray.max
       freqArray.zipWithIndex filter (_._1 == max) map (f => numberToPattern(f._2, k))
     }
-    println(patternToNumber("ATGCAA"))
-    println(numberToPattern(912, 6))
-    println(numberToPattern(5437, 8))
-    println(computeFrequencyArray(data, count.toInt) mkString " ")
+//    println(patternToNumber("ATGCAA"))
+//    println(numberToPattern(912, 6))
+//    println(numberToPattern(5437, 8))
+    println(s"FreqArray: count: $count")
     frequentWords(data, count.toInt) foreach println
+    println(computeFrequencyArray(data, count.toInt) mkString " ")
 
 
   }
