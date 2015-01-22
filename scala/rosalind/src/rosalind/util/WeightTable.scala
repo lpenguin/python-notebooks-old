@@ -28,7 +28,9 @@ Y   163.06333"""
     val Array(letter, weight) = x.split("\\s+")
     letter.head -> weight.toFloat
   }).toMap
-  
+
+  def masses = (table.values map (_.toInt)).toSet
+
   def apply(l:Char):Float = table(l)
 
   def apply(peptide:String):Int = {
