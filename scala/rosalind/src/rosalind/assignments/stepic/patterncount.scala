@@ -1,7 +1,7 @@
 package rosalind.assignments.stepic
 
 import scala.io.Source
-import rosalind.util.FrequentWords._
+
 /**
  * Created by nikita on 30.12.14.
  */
