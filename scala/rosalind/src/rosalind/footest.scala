@@ -29,13 +29,14 @@ object footest {
     println(List(1, 2, 3) == List(1, 2, 3))
 
 
+    var ms = SortedMap[Int, List[Peptide]]()
 
-    var ms = SortedMap(0 -> 1)
-
-    val m = (expand(EmptyPeptide) map (x => score(x, spectrum) -> x)).toMap
-
-    println(m)
-
+    val scores = expand(EmptyPeptide) map (x => score(x, spectrum) -> x)
+    for((score, peptide) <- scores){
+      val v = peptide :: (ms getOrElse (score, Nil))
+      ms = ms + (score -> v)
+    }
+    println(ms)
     expand(EmptyPeptide).size.println
   }
 
