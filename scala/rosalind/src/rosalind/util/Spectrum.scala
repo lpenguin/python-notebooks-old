@@ -1,6 +1,6 @@
 package rosalind.util
 
-import scala.collection.{mutable, Seq}
+import scala.collection.{Iterable, mutable, Seq}
 import StringUtils._
 /**
  * Created by nikita on 10.01.15.
@@ -49,6 +49,10 @@ object Spectrum {
       res += prefixMasses(j) - prefixMasses(i)
     }
     res.toSeq
+  }
+
+  def expand(peptide:List[Int]):Iterable[List[Int]] = {
+    WeightTable.masses map (m => m :: peptide)
   }
 
   def massesList(peptide:String):Seq[Int] = peptide map WeightTable.apply map (_.toInt)

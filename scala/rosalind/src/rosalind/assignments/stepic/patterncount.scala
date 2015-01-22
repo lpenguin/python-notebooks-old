@@ -41,16 +41,16 @@ object patterncount {
     val List(data, count) = Source.fromFile("./data/stepic_fw_1.txt").getLines().toList
     frequentWordsNaive(data, count.toInt) foreach println
 
-    def frequentWords(text:String, k:Int):Seq[String] = {
-      val freqArray = computeFrequencyArray(text, k)
-      val max = freqArray.max
-      freqArray.zipWithIndex filter (_._1 == max) map (f => numberToPattern(f._2, k))
-    }
-    println(patternToNumber("ATGCAA"))
-    println(numberToPattern(912, 6))
-    println(numberToPattern(5437, 8))
-    println(computeFrequencyArray(data, count.toInt) mkString " ")
-    frequentWords(data, count.toInt) foreach println
+//    def frequentWords(text:String, k:Int):Seq[String] = {
+//      val freqArray = computeFrequencyArray(text, k)
+//      val max = freqArray.max
+//      freqArray.zipWithIndex filter (_._1 == max) map (f => numberToPattern(f._2, k))
+//    }
+//    println(patternToNumber("ATGCAA"))
+//    println(numberToPattern(912, 6))
+//    println(numberToPattern(5437, 8))
+//    println(computeFrequencyArray(data, count.toInt) mkString " ")
+//    frequentWords(data, count.toInt) foreach println
 
 
   }

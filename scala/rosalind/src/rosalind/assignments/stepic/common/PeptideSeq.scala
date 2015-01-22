@@ -8,19 +8,39 @@ import scala.io.Source
  */
 object PeptideSeq {
   object MassTable{
-    def readMasses() = {
-      val data = Source.fromFile("./data/integer_mass_table.txt").getLines()
-      data map (line => {
-        val Array(key, mass) = line split "\\s+"
-        (key.head, mass.toInt)
-      }) toMap
-    }
-    private val massTable = readMasses()
-    def masses = massTable.values
+    private val massTable =  Map(
+          'G' -> 57,
+          'A' -> 71,
+          'S' -> 87,
+          'P' -> 97,
+          'V' -> 99,
+          'T' -> 101,
+          'C' -> 103,
+          'I' -> 113,
+          'L' -> 113,
+          'N' -> 114,
+          'D' -> 115,
+          'K' -> 128,
+          'Q' -> 128,
+          'E' -> 129,
+          'M' -> 131,
+          'H' -> 137,
+          'F' -> 147,
+          'R' -> 156,
+          'Y' -> 163,
+          'W' -> 186)
+    private val distinctMasses = massTable.values.toList.distinct
+    def masses = distinctMasses
+    def apply(a:Char) = massTable(a)
   }
 
   type Peptide = List[Int]
-  type Spectrum = List[Int]
+  type Spectrum = Seq[Int]
+  val EmptyPeptide = Nil
+
+  def peptideFromString(peptideString:String):Peptide = peptideString.toList map (MassTable(_))
+
+  def spectrumFromString(string: String):Spectrum = string split "\\s+" map (_.toInt)
 
   def expand(peptide:Peptide):Iterable[Peptide] = {
     MassTable.masses map (m => m::peptide)
@@ -31,7 +51,10 @@ object PeptideSeq {
     peptideSpectrum.length - (peptideSpectrum diff spectrum).length
   }
 
-  def linearSpectrum(peptide:Peptide):Seq[Int] = {
+  /*
+    Warning: returns spectrum without first "0" element
+   */
+  def linearSpectrum(peptide:Peptide):Spectrum = {
     val prefixMasses = peptide.foldLeft(List(0))((acc, v) => (acc.head+v)::acc ).reverse
 
     for(i <- 0 until peptide.size;
@@ -39,7 +62,7 @@ object PeptideSeq {
     ) yield prefixMasses(j) - prefixMasses(i)
   }
 
-  def cyclicSpectrum(peptide:Peptide):Seq[Int] = {
+  def cyclicSpectrum(peptide:Peptide):Spectrum = {
     val peptideMass = peptide.sum
     val prefixMasses = peptide.foldLeft(List(0))((acc, v) => (acc.head+v)::acc ).reverse
 
