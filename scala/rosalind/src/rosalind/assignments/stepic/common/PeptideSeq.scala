@@ -1,4 +1,4 @@
-package rosalind.assignments.stepic.peptideseq
+package rosalind.assignments.stepic.common
 
 import scala.collection.{mutable, Seq}
 import scala.io.Source
@@ -6,7 +6,7 @@ import scala.io.Source
 /**
  * Created by nikita on 21.01.15.
  */
-object Common {
+object PeptideSeq {
   object MassTable{
     def readMasses() = {
       val data = Source.fromFile("./data/integer_mass_table.txt").getLines()
