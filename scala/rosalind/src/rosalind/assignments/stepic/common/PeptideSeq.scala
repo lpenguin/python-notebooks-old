@@ -42,7 +42,7 @@ object PeptideSeq {
 
   def spectrumFromString(string: String):Spectrum = string split "\\s+" map (_.toInt)
 
-  def expand(peptide:Peptide):Iterable[Peptide] = {
+  def expand(peptide:Peptide):List[Peptide] = {
     MassTable.masses map (m => m::peptide)
   }
 
