@@ -15,54 +15,43 @@ import scala.util.Random
  */
 object footest {
   def main(args: Array[String]) {
-    val peptide = peptideFromString("NQEL")
-//    val spectrum = spectrumFromString("0 99 113 114 128 227 257 299 355 356 370 371 484")
+    val peptide = peptideFromString("NQGAE")
 //    val spectrum = spectrumFromString("0 71 113 129 147 200 218 260 313 331 347 389 460")
-    val data = Source.fromFile("./data/rosalind_2f.txt").getLines().toList
+//    val data = Source.fromFile("./data/rosalind_2f.txt").getLines().toList
+    val data = Source.fromFile("./data/dataset_102_9.txt").getLines().toList
     val List(takeNStr, spectrumStr) = data
     val spectrum = spectrumFromString(spectrumStr)
     val takeN = takeNStr.toInt
-//    println(cyclicSpectrum(peptide).toList)
-////    println(Spectrum.cyclicSpectrum(peptide))
-//
-//    println(linearSpectrum(peptide).toList)
-////    println(Spectrum.linearSpectrum(peptide).toList)
-//    println(score(peptide, spectrum))
-////    println(Spectrum.score(peptide, spectrum))
-//    println(peptide)
-////    println(Spectrum.expand(peptide).toList diff PeptideSeq.expand(peptide).toList )
-////    println(PeptideSeq.expand(peptide).toList diff Spectrum.expand(peptide).toList )
-//    println(List(1, 2, 3) == List(1, 2, 3))
-//
-//
-//    var ms = SortedMap[Int, List[Peptide]]()
-//
-//    val scores = expand(EmptyPeptide) map (x => score(x, spectrum) -> x) sortBy (_._1)
-//    scores foreach println
-//    val groupedScores = scores groupBy {case (score, _) => score}
-//
-//    val testSet = for(i <- 1 to 100) yield Random.nextInt(100) -> i
-//
-//
-//
-//    scores groupOrdered (x => x._1)
 
 
 
-    def peptideSearch(spectrum: Spectrum, takeN:Int):List[Peptide] = {
+    def cutTopCandidates(takeN:Int, candidates:List[(Int, Peptide)]):List[Peptide] = {
+      val (top, other) = candidates splitAt takeN
+      val last = top.last._1
+      top ::: other.takeWhile( t => t._1 == last) map (_._2)
+    }
+
+    def cutGroupedCandidates(takeN:Int, candidates:List[(Int, Peptide)]):List[Peptide] = {
+      val t = candidates groupOrdered (_._1)
+      t take takeN flatMap (_._2 map (_._2))
+    }
+
+    def linearScore(peptide:Peptide, spectrum: Spectrum):Int = {
+      val peptideSpectrum = linearSpectrum(peptide)
+      peptideSpectrum.length - (peptideSpectrum diff spectrum).length
+    }
+
+    def cyclicScore(peptide:Peptide, spectrum: Spectrum):Int = {
+      val peptideSpectrum = cyclicSpectrum(peptide)
+      peptideSpectrum.length - (peptideSpectrum diff spectrum).length
+    }
+
+    def peptideSearch(spectrum: Spectrum, takeN:Int)(cutFunc: (Int, List[(Int, Peptide)])=> List[Peptide]):List[Peptide] = {
       def expandAndTakeClosest(candidates:List[Peptide]):List[Peptide] = {
-        def cut(candidates:List[(Int, Peptide)]):List[(Int, Peptide)] = {
-          val (top, other) = candidates splitAt takeN
-          val last = top.last._1
-//          top foreach println
-          top ::: other.takeWhile( t => t._1 == last)
-        }
-        val expandedSet = candidates flatMap (peptide => expand(peptide)) map (peptide => score(peptide, spectrum) -> peptide) sortBy (-_._1)
-        val t = expandedSet groupOrdered (_._1)
-//        println("Expanded: ")
-//        t foreach println
-        t take takeN flatMap (_._2 map (_._2))
-//        cut(expandedSet) map (_._2)
+        val expanded = candidates flatMap (peptide => expand(peptide)) map (peptide => linearScore(peptide, spectrum) -> peptide) sortBy (-_._1)
+//        println(s"Expanded: ${expanded.size}")
+//        expanded foreach {t => println(s"${t._1} -> ${t._2 mkString "-"}")}
+        cutFunc(takeN, expanded)
       }
 
 
@@ -74,25 +63,37 @@ object footest {
       var iterationsCount = 1
       while(candidates.nonEmpty){
         val closest = expandAndTakeClosest(candidates) map ( p => (p.sum, p) ) filterNot (_._1 > searchedPeptideMass)
-        println(s"iteration $iterationsCount: found closest candidates: ${closest.size}")
+//        println(s"iteration $iterationsCount: found closest candidates: ${closest.size}")
+//        closest foreach { p => println(p._2 mkString "-") }
         iterationsCount += 1
         val (less, equal) = closest partition (_._1 < searchedPeptideMass)
         candidates = less map (_._2)
         matched = (equal map (_._2)) ::: matched
       }
-      filterMax(matched)(score(_, spectrum))
+//      filterMax(matched)(cyclicScore(_, spectrum))
+      matched.filter(cyclicScore(_, spectrum) == 83)
     }
+
+//    val takeN = 8
+//    val spectrum = cyclicSpectrum(peptide).sorted
+
+    println(s"Peptide: ${peptide mkString "-"}")
+    println(s"Spectrum: ${spectrum mkString "-"}")
 
     //113-147-71-129
     println(s"drop every: $takeN")
-    val result = peptideSearch(spectrum, takeN)
-    println(result.size)
+    val result = peptideSearch(spectrum, takeN)(cutTopCandidates)
+
+    println(s"Found: ${result.size} peptides")
     result foreach { candidate =>
-      println(s"$candidate: ${score(candidate, spectrum)}")
+      println(s"Peptide ${candidate mkString "-"}: score ${cyclicScore(candidate, spectrum)}")
     }
 
-    println(result map (_.mkString("-")) mkString " ")
 
+    println(result map (_.mkString("-")) mkString " ")
+    println(s"Max score: ${spectrum.size}")
+//    println(cyclicSpectrum(List(57, 128, 128)).sorted mkString "-")
+//    println(cyclicSpectrum(List(57, 71, 114)).sorted mkString "-")
 //    println(result.head mkString "-")
 
 

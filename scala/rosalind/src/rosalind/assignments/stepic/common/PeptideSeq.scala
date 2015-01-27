@@ -46,10 +46,7 @@ object PeptideSeq {
     MassTable.masses map (m => m::peptide)
   }
 
-  def score(peptide:Peptide, spectrum: Spectrum):Int = {
-    val peptideSpectrum = cyclicSpectrum(peptide)
-    peptideSpectrum.length - (peptideSpectrum diff spectrum).length
-  }
+
 
   /*
     Warning: returns spectrum without first "0" element
