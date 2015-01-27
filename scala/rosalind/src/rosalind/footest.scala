@@ -36,15 +36,7 @@ object footest {
       t take takeN flatMap (_._2 map (_._2))
     }
 
-    def linearScore(peptide:Peptide, spectrum: Spectrum):Int = {
-      val peptideSpectrum = linearSpectrum(peptide)
-      peptideSpectrum.length - (peptideSpectrum diff spectrum).length + 1
-    }
 
-    def cyclicScore(peptide:Peptide, spectrum: Spectrum):Int = {
-      val peptideSpectrum = cyclicSpectrum(peptide)
-      peptideSpectrum.length - (peptideSpectrum diff spectrum).length
-    }
 
     def peptideSearch(spectrum: Spectrum, takeN:Int)(trim: (Int, List[(Int, Peptide)])=> List[Peptide]):List[Peptide] = {
       def expandPeptides(candidates:List[Peptide]):List[(Int, Peptide)] = {

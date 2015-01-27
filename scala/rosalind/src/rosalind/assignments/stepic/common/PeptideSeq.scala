@@ -46,7 +46,19 @@ object PeptideSeq {
     MassTable.masses map (m => m::peptide)
   }
 
+  def expand(peptide: Peptide, alphapbet:Seq[Int]):Seq[Peptide] = {
+    alphapbet map (_::peptide)
+  }
 
+  def linearScore(peptide:Peptide, spectrum: Spectrum):Int = {
+    val peptideSpectrum = linearSpectrum(peptide)
+    peptideSpectrum.length - (peptideSpectrum diff spectrum).length + 1
+  }
+
+  def cyclicScore(peptide:Peptide, spectrum: Spectrum):Int = {
+    val peptideSpectrum = cyclicSpectrum(peptide)
+    peptideSpectrum.length - (peptideSpectrum diff spectrum).length
+  }
 
   /*
     Warning: returns spectrum without first "0" element
