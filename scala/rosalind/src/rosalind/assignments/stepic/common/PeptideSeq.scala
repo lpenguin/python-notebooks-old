@@ -29,7 +29,7 @@ object PeptideSeq {
           'R' -> 156,
           'Y' -> 163,
           'W' -> 186)
-    private val distinctMasses = massTable.values.toList.distinct
+    private val distinctMasses = massTable.values.toList.distinct.sorted
     def masses = distinctMasses
     def apply(a:Char) = massTable(a)
   }

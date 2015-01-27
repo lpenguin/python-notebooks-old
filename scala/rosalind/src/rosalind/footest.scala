@@ -6,6 +6,7 @@ import rosalind.util.Prelude._
 
 import scala.collection.SortedMap
 import scala.collection.immutable.HashMap
+import scala.collection.mutable.ListBuffer
 import scala.io.Source
 import scala.util.Random
 
@@ -37,7 +38,7 @@ object footest {
 
     def linearScore(peptide:Peptide, spectrum: Spectrum):Int = {
       val peptideSpectrum = linearSpectrum(peptide)
-      peptideSpectrum.length - (peptideSpectrum diff spectrum).length
+      peptideSpectrum.length - (peptideSpectrum diff spectrum).length + 1
     }
 
     def cyclicScore(peptide:Peptide, spectrum: Spectrum):Int = {
@@ -48,17 +49,7 @@ object footest {
     def peptideSearch(spectrum: Spectrum, takeN:Int)(trim: (Int, List[(Int, Peptide)])=> List[Peptide]):List[Peptide] = {
       def expandPeptides(candidates:List[Peptide]):List[(Int, Peptide)] = {
         println(s"Expanding list of ${candidates.size} leaderBoard")
-        val expanded = candidates flatMap (peptide => expand(peptide)) map (peptide => linearScore(peptide, spectrum) -> peptide) sortBy (-_._1)
-        for((pep, index) <- expanded.zipWithIndex) {
-          if(pep._2 == p2){
-            println("Found p2!!")
-          }
-          if(pep._2 == p.takeRight(pep._2.size)){
-            println(s"Found p #$index with score ${pep._1} of max ${expanded.head._1}: ${pep._2 mkString "-"}")
-            println(expanded.head._2.mkString("-"))
-          }
-        }
-        expanded
+        candidates flatMap (peptide => expand(peptide)) map (peptide => linearScore(peptide, spectrum) -> peptide) sortBy (-_._1)
 //        println(s"Expanded: ${expanded.size}")
 //        expanded foreach {t => println(s"${t._1} -> ${t._2 mkString "-"}")}
       }
@@ -72,7 +63,7 @@ object footest {
       var iterationsCount = 1
       while(leaderBoard.nonEmpty){
         println(s"iteration $iterationsCount:")
-        val closest = expandPeptides(leaderBoard) map ( p => (p._2.sum, p) ) filterNot (_._1 > searchedPeptideMass)
+        val closest = expandPeptides(leaderBoard) map ( p => (p._2.sum, p) ) filterNot (p => p._1 > searchedPeptideMass)
 //        closest foreach { p => println(p._2 mkString "-") }
         iterationsCount += 1
         val equal = closest filter (_._1 == searchedPeptideMass)
@@ -81,6 +72,7 @@ object footest {
         println("Adding new found expandPeptides: "+equal.size)
         matched = (equal map (_._2._2)) ::: matched
       }
+      println(s"Matched: ${matched.size}")
       filterMax(matched)(cyclicScore(_, spectrum))
 //      matched.filter(cyclicScore(_, spectrum) == 83)
     }
@@ -105,6 +97,7 @@ object footest {
     }
 
 
+
     println(result map (_.mkString("-")) mkString " ")
     println(s"Max score: ${spectrum.size}")
     val q = "97-186-147-114-128-163-99-128-113".split("-").map(_.toInt).toList
@@ -113,7 +106,78 @@ object footest {
 //    println(cyclicSpectrum(List(57, 71, 114)).sorted mkString "-")
 //    println(result.head mkString "-")
 
+    def dummyPeptideSearch(spectrum: Spectrum, n:Int):List[Peptide] = {
+      def expandPeptides(leaderboad:List[Peptide]):List[Peptide] = {
+        leaderboad flatMap (peptide => expand(peptide))
+      }
 
+      def mass(peptide: Peptide) = peptide.sum
+
+      def trim(leaderboard:ListBuffer[Peptide], n:Int):ListBuffer[Peptide] = {
+        val sorted = leaderboard.sortBy(p => -linearScore(p, spectrum))
+        if(sorted.size < n){
+          sorted
+        }else{
+          var found = false
+          val lastScore = linearScore(sorted(n-1), spectrum)
+          var grabIndex = n - 1
+          for(i <- n until sorted.size){
+            if(!found){
+              if(linearScore(sorted(i), spectrum) < lastScore){
+                grabIndex = i - 1
+                found = true
+              }
+            }
+          }
+          sorted take (grabIndex + 1)
+        }
+
+      }
+
+      def cutTopCandidates(leaderboard:ListBuffer[Peptide], n:Int):ListBuffer[Peptide] = {
+        if(leaderboard.isEmpty) {
+          leaderboard
+        }else {
+          val sorted = leaderboard.sortBy(p => -linearScore(p, spectrum))
+          val (top, other) = sorted.toList splitAt n
+          val last = linearScore(top.last, spectrum)
+          (top ::: other.takeWhile( t => linearScore(t, spectrum) == last)).to[ListBuffer]
+        }
+      }
+
+      var leaderboard = ListBuffer[Peptide](Nil)
+      val matchedPeptides = ListBuffer[Peptide](Nil)
+      val parentMass = spectrum.max
+
+      while(leaderboard.nonEmpty){
+        leaderboard = expandPeptides(leaderboard.toList).to[ListBuffer]
+        for(peptide <- leaderboard){
+          if(mass(peptide) == parentMass){
+            matchedPeptides += peptide
+          }else{
+            if(mass(peptide) > parentMass){
+              leaderboard -= peptide
+            }
+          }
+        }
+        leaderboard = trim(leaderboard, n)
+      }
+
+      matchedPeptides.toList.filter(p => cyclicScore(p, spectrum) == 83).sortBy(p => -cyclicScore(p, spectrum))
+    }
+
+    val ress = dummyPeptideSearch(spectrum, takeN)
+
+    println(s"Found: ${result.size} peptides")
+    ress foreach { candidate =>
+      println(s"Peptide ${candidate mkString "-"}: score ${cyclicScore(candidate, spectrum)} ${cyclicSpectrum(candidate).sorted mkString "-"}")
+    }
+
+
+    println(ress diff result)
+    println(result diff ress)
+
+    println(ress map (_.mkString("-")) mkString " ")
   }
 
 
