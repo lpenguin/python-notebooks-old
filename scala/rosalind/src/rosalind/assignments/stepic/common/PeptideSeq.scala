@@ -54,8 +54,8 @@ object PeptideSeq {
   def linearSpectrum(peptide:Peptide):Spectrum = {
     val prefixMasses = peptide.foldLeft(List(0))((acc, v) => (acc.head+v)::acc ).reverse
 
-    for(i <- 0 until peptide.size;
-        j <- i + 1 to peptide.size
+    for (i <- 0 until peptide.size;
+         j <- i + 1 to peptide.size
     ) yield prefixMasses(j) - prefixMasses(i)
   }
 
