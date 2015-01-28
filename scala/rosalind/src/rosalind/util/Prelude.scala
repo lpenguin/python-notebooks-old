@@ -5,6 +5,26 @@ import scala.Predef.{println => predPrintln}
  * Created by nikita on 22.01.15.
  */
 object Prelude {
+  implicit class ListUtilsExtension[A](val items: Iterable[A]) {
+    def allMaxBy[B](key: (A) => B)(implicit cmp: Ordering[B]): List[A] = {
+      items.foldLeft(List[A]()) { (acc, v) =>
+        acc.headOption match {
+          case None => v :: Nil
+          case Some(head) =>
+
+            val c = cmp.compare(key(head), key(v))
+            if (c == 0) {
+              v :: acc
+            } else if (c < 0) {
+              v :: Nil
+            } else {
+              acc
+            }
+        }
+      }
+    }
+  }
+
   implicit def PrintedValue[A](a:A) = new {
     def println = predPrintln(a)
   }
@@ -49,4 +69,9 @@ object Prelude {
       }
     }
   }
+
+  implicit def StringUtilsExtension(s:String) = new {
+    def slidingFast(windowLen:Int):Iterator[String] = StringUtils.slidingFast(s, windowLen)
+  }
+
 }
