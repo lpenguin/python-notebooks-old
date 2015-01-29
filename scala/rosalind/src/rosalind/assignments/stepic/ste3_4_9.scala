@@ -19,7 +19,7 @@ object ste3_4_9 {
   }
 
   def main(args: Array[String]) {
-    val data = Source.fromFile("./data/t.txt").getLines().toList
+    val data = Source.fromFile("./data/dataset_158_9.txt").getLines().toList
     val k = data.head.toInt
     val dnas = data.tail
 
