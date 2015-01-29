@@ -5,6 +5,9 @@ import scala.Predef.{println => predPrintln}
  * Created by nikita on 22.01.15.
  */
 object Prelude {
+  type CharList = List[Char]
+  val dict:CharList = List('A', 'C', 'G', 'T')
+
   implicit class ListUtilsExtension[A](val items: Iterable[A]) {
     def allMaxBy[B](key: (A) => B)(implicit cmp: Ordering[B]): List[A] = {
       items.foldLeft(List[A]()) { (acc, v) =>
@@ -72,6 +75,14 @@ object Prelude {
 
   implicit def StringUtilsExtension(s:String) = new {
     def slidingFast(windowLen:Int):Iterator[String] = StringUtils.slidingFast(s, windowLen)
+  }
+
+  implicit def CharSeqExtention(cl:Seq[Char]) = new {
+    def hamming(str:Seq[Char]):Int = {
+      (cl zip str) count (t => t._1 != t._2)
+    }
+
+
   }
 
 }

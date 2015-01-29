@@ -13,6 +13,7 @@ object FrequentWords {
   }
 
   def numberToPattern(number:Int, patterLength:Int):String = {
+
     def iter(number: Int): List[Char] = number match {
       case 0 => Nil
       case _ =>
