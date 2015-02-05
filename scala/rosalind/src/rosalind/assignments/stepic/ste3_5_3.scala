@@ -11,9 +11,7 @@ object ste3_5_3 {
     val profileMatrix = probs.transpose map (col => col.zipWithIndex map (t => indexMap(t._2) -> t._1) toMap)
 
     def kmerProb(kmer:String):Float = {
-      (kmer zip profileMatrix).foldLeft(1f){(acc, t) =>
-        acc * t._2(t._1)
-      }
+      (1f /: (kmer zip profileMatrix))((acc, t) => acc * t._2(t._1))
     }
 
     dna slidingFast k maxBy kmerProb

@@ -2,12 +2,12 @@
 
 import scala.collection.mutable.ListBuffer
 object foo {
-//  val peptide = PeptideSeq.peptideFromString("NQEL")
-//  val spectrum = "0 99 113 114 128 227 257 299 355 356 370 371 484" split "\\s+" map (_.toInt)
+  val l = 1 to 10
+  (0 /: l )((acc, v) => acc + v)
 
-  val n = 19
+  (0 /: l.zipWithIndex){case (acc, (v, i)) => acc + v}
 
-  Integer.parseInt( "100", 2 )
+  l map (_+1) toList;
+  l map (_+1)
 
-  n & 4
 }
