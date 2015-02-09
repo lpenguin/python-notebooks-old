@@ -11,24 +11,21 @@ import scala.util.Random
  */
 object ste3_6_5 {
   def randomizedMotifSearch(k:Int, t:Int, dnas:Seq[Dna]):Seq[Kmer] = {
-    def dropWhileDecreasing[A](f: A => Int)(items:Iterable[A]):Iterable[A] = {
-      if(items.isEmpty){
-        items
-      }else{
-        var value = f(items.head)
-      }
-    }
     val randomMotifs = dnas map { dna =>
       val n = Random.nextInt(dna.size - k)
       dna.slice(n, n + k)
     }
     val firstScore = Motif.score(randomMotifs)
-    Iterator.iterate(randomMotifs -> firstScore){
+    val bestMotifTIt = Iterator.iterate(randomMotifs -> firstScore){
       case (motifs, score) =>
         val profileMatrix = Motif.buildProfileMatrixLaplass(motifs)
         val newMotifs = dnas map (Motif.profileMostProbableKmer(profileMatrix, _))
         val newScore = Motif.score(newMotifs)
         newMotifs -> newScore
+    } sliding 2 dropWhile {case List(x, y) => x._2 > y._2}
+
+    bestMotifTIt.next() match {
+      case List((motifs, _), _) => motifs
     }
   }
 
