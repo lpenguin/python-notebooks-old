@@ -10,6 +10,31 @@ import scala.collection.immutable.Stream.Empty
 object Motif {
   type ProfileMatrix = Seq[Map[Nucleotide.Value, Float]]
 
+  def buildProfileMatrixLaplass(motifs:Seq[Kmer]):ProfileMatrix =
+    motifs.transpose map { col =>
+      val colSize = (col.size + 4).toFloat
+      (col groupBy identity map {
+        x => (x._1,  (x._2.size + 1) / colSize)
+      }).toMap.withDefaultValue(1f/colSize)
+    }
+
+  def profileMostProbableKmer(profileMatrix: ProfileMatrix, dna:Dna):Kmer = {
+    def profileScore(kmer:Kmer):Float = {
+      profileMatrix.zip(kmer).foldRight(1f) { case ((m, nuc), acc) =>
+        acc * m(nuc)
+      }
+    }
+    dna sliding profileMatrix.size maxBy profileScore
+  }
+
+  def score(motifs:Seq[Kmer]):Int = {
+    motifs.transpose map {
+      col =>
+        val colSize = col.size
+        colSize - (col groupBy identity map (_._2.size) max)
+    } sum
+  }
+
   val dictStream = (dict map (_::Nil)).toStream
   def enumeratePatterns(n:Int):Stream[CharList] = n match {
     case 1 => dictStream
