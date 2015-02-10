@@ -18,13 +18,14 @@ object Motif {
       }).toMap.withDefaultValue(1f/colSize)
     }
 
-  def profileMostProbableKmer(profileMatrix: ProfileMatrix, dna:Dna):Kmer = {
-    def profileScore(kmer:Kmer):Float = {
-      profileMatrix.zip(kmer).foldRight(1f) { case ((m, nuc), acc) =>
-        acc * m(nuc)
-      }
+  def kmerProfileScore(profileMatrix:ProfileMatrix)(kmer:Kmer):Float = {
+    profileMatrix.zip(kmer).foldRight(1f) { case ((probs, nuc), acc) =>
+      acc * probs(nuc)
     }
-    dna sliding profileMatrix.size maxBy profileScore
+  }
+
+  def profileMostProbableKmer(profileMatrix: ProfileMatrix, dna:Dna):Kmer = {
+    dna sliding profileMatrix.size maxBy kmerProfileScore(profileMatrix)
   }
 
   def score(motifs:Seq[Kmer]):Int = {
