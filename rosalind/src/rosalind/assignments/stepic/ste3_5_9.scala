@@ -17,12 +17,11 @@ object ste3_5_9 {
     case firstDna::restDnas =>
       firstDna sliding k map {
         motif =>
-          var motifs = List(motif)
-          for(i <- 0 until t - 1){
-            val profileMatrix = buildProfileMatrixLaplass(motifs)
-            motifs = profileMostProbableKmer(profileMatrix, restDnas(i))::motifs
-          }
-          motifs.reverse
+          restDnas.foldLeft(motif::Nil){
+            (motifs, dna) =>
+              val profileMatrix = buildProfileMatrixLaplass(motifs)
+              profileMostProbableKmer(profileMatrix, dna)::motifs
+          }.reverse
       } minBy score
   }
 

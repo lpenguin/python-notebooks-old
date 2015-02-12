@@ -16,7 +16,7 @@ object ste3_9_3 {
     }
 
     def genRandom(probs:Iterable[Float]):Int = {
-      def takeAtSum(probs:Iterable[Float], v:Float) = {
+      def takeAtSum(v:Float) = {
         probs.foldLeft((0, 0f)::Nil){
           case (p@(index, sum)::xs, item) => (index + 1, sum + item)::p
         } find {
@@ -26,7 +26,7 @@ object ste3_9_3 {
         }
       }
 
-      takeAtSum(probs, Random.nextFloat() * probs.sum)
+      takeAtSum(Random.nextFloat() * probs.sum)
     }
 
     def newMotifs(motifs:List[Kmer]):List[Kmer] = {
@@ -36,7 +36,7 @@ object ste3_9_3 {
       val dna = dnas(i)
       val probDistribution = buildProbabilityDistribution(dna, profileMatrix)
       val randPosition = genRandom(probDistribution)
-      val newMotif:Kmer = dna.slice(randPosition, randPosition + k)
+      val newMotif = dna.slice(randPosition, randPosition + k)
 
       left ++ (newMotif :: right)
     }
@@ -45,13 +45,14 @@ object ste3_9_3 {
       val n = Random.nextInt(dna.size - k)
       dna.slice(n, n + k)
     } toList;
+
     Iterator.iterate((0, randomMotifs, score(randomMotifs))){
       case (index, motifs, motifsScore) =>
         val ms = newMotifs(motifs)
         (index + 1, ms, score(ms))
     } takeWhile {
       case (index, _, _) => index <= n
-    } maxBy {
+    } minBy {
       case (_, _, motifsScore) => motifsScore
     } match {
       case (_, motifs, _) => motifs
@@ -59,9 +60,9 @@ object ste3_9_3 {
   }
 
   def main(args: Array[String]) {
-    Source.fromFile("./data/t.txt").getLines().toList match {
+    Source.fromFile("./data/dataset_163_4.txt").getLines().toList match {
       case Extract(Int(k), Int(t), Int(n))::dnas =>
-        val res = 1 to 100 map { x =>
+        val res = 1 to 20 map { x =>
           println(s"Iteration #$x")
           val motifs = gibbsSampling(dnas map fromString, k, t, n)
           val sc = score(motifs)
