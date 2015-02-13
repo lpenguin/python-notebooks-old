@@ -1,4 +1,4 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter1
 
 import rosalind.util.FrequentWords._
 import rosalind.util.Profiler

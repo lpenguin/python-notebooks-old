@@ -1,9 +1,6 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter2
 
 import scala.io.Source
-import scala.collection._
-import rosalind.util.StringUtils._
-import rosalind.util.WeightTable
 /**
  * Created by nikita on 07.01.15.
  */

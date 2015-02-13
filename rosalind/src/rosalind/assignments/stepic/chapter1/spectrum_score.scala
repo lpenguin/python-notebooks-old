@@ -1,7 +1,6 @@
-package rosalind.assignments.stepic
-import rosalind.util.Spectrum._
+package rosalind.assignments.stepic.chapter1
 
-import scala.io.Source
+import rosalind.util.Spectrum._
 
 /**
  * Created by nikita on 11.01.15.

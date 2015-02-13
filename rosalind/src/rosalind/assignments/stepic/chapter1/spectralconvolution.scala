@@ -1,9 +1,7 @@
-package rosalind.assignments
+package rosalind.assignments.stepic.chapter1
 
-import _root_.rosalind.assignments.stepic.common.PeptideSeq
-import _root_.rosalind.assignments.stepic.common.PeptideSeq._
-import _root_.rosalind.util.Prelude._
-
+import rosalind.assignments.common.PeptideSeq._
+import rosalind.util.Prelude._
 import scala.io.Source
 
 /**

@@ -1,7 +1,8 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter3
+
+import rosalind.util.Prelude._
 
 import scala.io.Source
-import rosalind.util.Prelude._
 /**
  * Created by nikita on 30.01.15.
  */

@@ -1,8 +1,9 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter3
 
-import scala.io.Source
-import scala.collection.mutable
 import rosalind.util.Prelude._
+
+import scala.collection.mutable
+import scala.io.Source
 /**
  * Created by nikita on 28.01.15.
  */

@@ -1,7 +1,7 @@
 package rosalind
 
-import rosalind.assignments.stepic.common.PeptideSeq
-import rosalind.assignments.stepic.common.PeptideSeq._
+import rosalind.assignments.common.PeptideSeq
+import rosalind.assignments.common.PeptideSeq._
 import rosalind.util.Prelude._
 
 import scala.collection.SortedMap

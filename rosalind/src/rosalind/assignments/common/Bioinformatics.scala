@@ -1,4 +1,4 @@
-package rosalind.assignments.stepic.common
+package rosalind.assignments.common
 
 
 

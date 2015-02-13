@@ -1,6 +1,4 @@
-package rosalind.assignments.stepic
-
-import scala.collection.mutable.ListBuffer
+package rosalind.assignments.stepic.chapter2
 
 
 /**

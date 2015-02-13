@@ -1,6 +1,6 @@
-package rosalind.assignments.stepic.common
+package rosalind.assignments.common
 
-import rosalind.assignments.stepic.common.Bioinformatics._
+import rosalind.assignments.common.Bioinformatics._
 import rosalind.util.Prelude._
 
 import scala.collection.immutable.Stream.Empty
@@ -17,6 +17,25 @@ object Motif {
         x => (x._1,  (x._2.size + 1) / colSize)
       }).toMap.withDefaultValue(1f/colSize)
     }
+
+  def buildProfileMatrix(motifs:Seq[Kmer]):ProfileMatrix =
+    motifs.transpose map { col =>
+      val colSize = col.size.toFloat
+      (col groupBy identity map {
+        x => (x._1,  x._2.size / colSize)
+      }).toMap.withDefaultValue(0f)
+    }
+
+
+  def consensusString(motifs:Seq[Kmer]):Kmer = {
+    motifs.transpose map {
+      col => col groupBy identity maxBy {
+        g => g._2.size
+      } match {
+        case (x, _) => x
+      }
+    }
+  }
 
   def kmerProfileScore(profileMatrix:ProfileMatrix)(kmer:Kmer):Float = {
     profileMatrix.zip(kmer).foldRight(1f) { case ((probs, nuc), acc) =>

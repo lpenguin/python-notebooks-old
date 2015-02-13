@@ -1,9 +1,10 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter2
 
+import rosalind.util.WeightTable
+
+import scala.collection._
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
-import scala.collection._
-import rosalind.util.WeightTable
 /**
  * Created by nikita on 09.01.15.
  */

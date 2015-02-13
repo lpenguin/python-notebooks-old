@@ -1,7 +1,7 @@
 package rosalind
 
 import scala.io.Source
-import rosalind.assignments.stepic.common.PeptideSeq._
+import rosalind.assignments.common.PeptideSeq._
 /**
  * Created by nikita on 27.01.15.
  */

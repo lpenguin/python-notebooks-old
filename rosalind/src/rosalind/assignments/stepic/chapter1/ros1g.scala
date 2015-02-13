@@ -1,11 +1,8 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter1
 
-import java.lang.Comparable
-
-import rosalind.util.Profiler
 import rosalind.util.ListUtils._
-import rosalind.util.ListCombinatorics._
 import rosalind.util.StringUtils._
+
 import scala.collection.mutable
 import scala.io.Source
 

@@ -1,6 +1,5 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter1
 
-import rosalind.util.PatternMatch._
 import scala.io.Source
 
 /**

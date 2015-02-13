@@ -1,7 +1,7 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter1
 
-import rosalind.util.StringUtils._
 import rosalind.util.ListUtils._
+import rosalind.util.StringUtils._
 
 import scala.collection.mutable
 import scala.io.Source

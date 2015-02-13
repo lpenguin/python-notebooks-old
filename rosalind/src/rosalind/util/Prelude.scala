@@ -1,10 +1,19 @@
 package rosalind.util
 
 import scala.Predef.{println => predPrintln}
+import scala.io.Source
+
 /**
  * Created by nikita on 22.01.15.
  */
 object Prelude {
+  trait Task{
+    def run(data:List[String]):Seq[String]
+  }
+
+  def fromData(dataName:String):List[String] =
+    Source.fromFile(s"./data/$dataName.txt").getLines().toList
+
   type CharList = List[Char]
   val dict:CharList = List('A', 'C', 'G', 'T')
 

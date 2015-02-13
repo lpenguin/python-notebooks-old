@@ -1,4 +1,4 @@
-package rosalind.assignments.stepic
+package rosalind.assignments.stepic.chapter1
 
 import scala.collection.immutable.Stream.Empty
 import scala.io.Source

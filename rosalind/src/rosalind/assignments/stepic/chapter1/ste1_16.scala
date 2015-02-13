@@ -1,6 +1,4 @@
-package rosalind.assignments.stepic
-
-import scala.io.Source
+package rosalind.assignments.stepic.chapter1
 
 /**
  * Created by nikita on 28.01.15.
